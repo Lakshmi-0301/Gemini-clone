@@ -1,0 +1,138 @@
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  background: #f8f9fb;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  transition: width 0.3s ease;
+  box-sizing: border-box;
+  position: fixed;
+  overflow-y: auto;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.top-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.menu {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.new-chat-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.new-chat {
+  background-color: #e0e0e0;
+  border-radius: 50%;
+  padding: 12px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  position: relative;
+}
+
+.new-chat:hover {
+  background-color: #d5d5d5;
+}
+
+.new-chat img {
+  width: 20px;
+  height: 20px;
+}
+
+.new-chat-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1a73e8;
+  white-space: nowrap;
+}
+
+.recent-title {
+  font-size: 14px;
+  color: #5f6368;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.recent {
+  flex-grow: 1;
+  margin-top: 20px;
+}
+
+.recent-entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.recent-entry img {
+  width: 20px;
+  height: 20px;
+}
+
+.recent-entry p {
+  margin: 0;
+  font-size: 15px;
+  color: #202124;
+}
+
+.recent-entry:hover {
+  background-color: #e8eaed;
+}
+
+.bottom {
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* --- Tooltip Styling --- */
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  margin-left: 10px;
+  z-index: 999;
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+}
