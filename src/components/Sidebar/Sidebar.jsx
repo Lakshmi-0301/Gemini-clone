@@ -1,8 +1,16 @@
-import React, { useState } from 'react'
-import './Sidebar.css'
-import { assets } from '../../assets/assets'
+import React, { useState, useContext } from 'react';
+import './Sidebar.css';
+import { assets } from '../../assets/assets';
+import { Context } from '../../context/context'; // ✅ import context
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
+  const {
+    createNewChat,
+    chats,
+    activeChatId,
+    setActiveChatId,
+  } = useContext(Context); // ✅ pull required values
+
   return (
     <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
       <div className="top-row">
@@ -13,7 +21,11 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
           onClick={() => setCollapsed(!collapsed)}
         />
         <div className="new-chat-wrapper">
-          <div className="new-chat" data-tooltip={collapsed ? 'New Chat' : ''}>
+          <div
+            className="new-chat"
+            data-tooltip={collapsed ? 'New Chat' : ''}
+            onClick={createNewChat} // ✅ now works!
+          >
             <img src={assets.plus_icon} alt="New" />
           </div>
           {!collapsed && <p className="new-chat-label">New Chat</p>}
@@ -23,12 +35,20 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       {!collapsed && (
         <div className="recent">
           <p className="recent-title">Recent</p>
-          <div className="recent-entry">
-            <img src={assets.message_icon} alt="" />
-            <p>What is react?</p>
-          </div>
         </div>
       )}
+
+      {/* ✅ Chat entries from context */}
+      {chats.map(chat => (
+        <div
+          key={chat.id}
+          className={`recent-entry ${chat.id === activeChatId ? 'active' : ''}`}
+          onClick={() => setActiveChatId(chat.id)}
+        >
+          <img src={assets.message_icon} />
+          <p>{chat.messages[0]?.text.slice(0, 30) || 'New Chat'}</p>
+        </div>
+      ))}
 
       <div className="bottom">
         <div
@@ -54,7 +74,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

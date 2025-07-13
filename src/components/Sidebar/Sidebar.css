@@ -136,3 +136,17 @@
 [data-tooltip]:hover::after {
   opacity: 1;
 }
+
+.sidebar.collapsed .recent-entry p,
+.sidebar.collapsed .new-chat-label {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+.recent-entry p,
+.new-chat-label {
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
