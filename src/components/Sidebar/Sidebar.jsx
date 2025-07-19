@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import './Sidebar.css';
 import { assets } from '../../assets/assets';
-import { Context } from '../../context/context'; // ✅ import context
+import { Context } from '../../context/context';
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
   const {
@@ -9,7 +9,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
     chats,
     activeChatId,
     setActiveChatId,
-  } = useContext(Context); // ✅ pull required values
+  } = useContext(Context);
 
   return (
     <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
@@ -24,7 +24,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
           <div
             className="new-chat"
             data-tooltip={collapsed ? 'New Chat' : ''}
-            onClick={createNewChat} // ✅ now works!
+            onClick={createNewChat}
           >
             <img src={assets.plus_icon} alt="New" />
           </div>
@@ -38,26 +38,31 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         </div>
       )}
 
-      {/* ✅ Chat entries from context */}
-      {chats.map(chat => (
-        <div
-          key={chat.id}
-          className={`recent-entry ${chat.id === activeChatId ? 'active' : ''}`}
-          onClick={() => setActiveChatId(chat.id)}
-        >
-          <img src={assets.message_icon} />
-          <p>{chat.messages[0]?.text.slice(0, 30) || 'New Chat'}</p>
-        </div>
-      ))}
+      {/* ✅ Show only chats with messages */}
+      {chats
+        .filter(chat => chat.messages.length > 0)
+        .map(chat => (
+          <div
+            key={chat.id}
+            className={`recent-entry ${chat.id === activeChatId ? 'active' : ''}`}
+            onClick={() => setActiveChatId(chat.id)}
+          >
+            <img src={assets.message_icon} />
+            <p>{chat.messages[0]?.text.slice(0, 30) || 'New Chat'}</p>
+          </div>
+        ))}
 
       <div className="bottom">
         <div
           className="bottom-item recent-entry"
           data-tooltip={collapsed ? 'Help' : ''}
+          onClick={() => window.open('https://support.google.com/gemini', '_blank')}
+          style={{ cursor: 'pointer' }}
         >
           <img src={assets.question_icon} alt="Help" />
           {!collapsed && <p>Help</p>}
         </div>
+
         <div
           className="bottom-item recent-entry"
           data-tooltip={collapsed ? 'History' : ''}

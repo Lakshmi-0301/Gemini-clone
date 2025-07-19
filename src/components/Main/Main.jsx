@@ -1,34 +1,28 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './Main.css';
 import { assets } from '../../assets/assets';
 import { Context } from '../../context/context';
 import ReactMarkdown from 'react-markdown';
 
-const Main = ({ collapsed }) => {  // ✅ Accept collapsed as prop
-  const { sendPrompt, response, loading } = useContext(Context);
+const Main = ({ collapsed }) => {
+  const { sendPrompt, response, loading, chats, activeChatId } = useContext(Context);
   const [input, setInput] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
-  const { chats, activeChatId } = useContext(Context);
 
   const activeChat = chats.find(c => c.id === activeChatId);
 
+  // ✅ Reset greeting on switching to a new empty chat
+  useEffect(() => {
+    if (!activeChat || activeChat.messages.length === 0) {
+      setHasSearched(false);
+    }
+  }, [activeChat]);
+
   const suggestions = [
-    {
-      text: 'Suggest top places to visit in summer',
-      icon: assets.compass_icon,
-    },
-    {
-      text: 'Summarize this concept : Parallel Computing',
-      icon: assets.bulb_icon,
-    },
-    {
-      text: 'Summer retreat activities',
-      icon: assets.message_icon,
-    },
-    {
-      text: 'Improve the readability of this code',
-      icon: assets.code_icon,
-    },
+    { text: 'Suggest top places to visit in summer', icon: assets.compass_icon },
+    { text: 'Summarize this concept : Parallel Computing', icon: assets.bulb_icon },
+    { text: 'Summer retreat activities', icon: assets.message_icon },
+    { text: 'Improve the readability of this code', icon: assets.code_icon },
   ];
 
   const handleSend = () => {
@@ -45,14 +39,19 @@ const Main = ({ collapsed }) => {  // ✅ Accept collapsed as prop
   };
 
   return (
-    <div className={`main ${collapsed ? 'collapsed' : ''}`}> {/* ✅ Adjust main margin */}
+    <div className={`main ${collapsed ? 'collapsed' : ''}`}>
       <div className="nav">
         <p>Gemini</p>
-        <img src={assets.user_icon} alt="user icon" />
+        <img
+          src={assets.user_icon}
+          alt="user icon"
+          onClick={() => window.open('https://myaccount.google.com', '_blank')}
+          style={{ cursor: 'pointer' }}
+        />
       </div>
 
       <div className="main-container">
-        {!hasSearched && (
+        {!hasSearched && (!activeChat || activeChat.messages.length === 0) && (
           <>
             <div className="greet">
               <p>
@@ -107,7 +106,10 @@ const Main = ({ collapsed }) => {  // ✅ Accept collapsed as prop
 
         {activeChat?.messages.map((msg, index) => (
           <div className="response-box" key={index}>
-            <p><strong>{msg.role === 'user' ? 'You' : 'Gemini'}:</strong> <ReactMarkdown>{msg.text}</ReactMarkdown></p>
+            <div>
+              <strong>{msg.role === 'user' ? 'You' : 'Gemini'}:</strong>
+              <ReactMarkdown>{msg.text}</ReactMarkdown>
+            </div>
           </div>
         ))}
 
